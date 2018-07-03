@@ -1,0 +1,9 @@
+version: 1.0.1
+files:
+  - url: laligu-setup-1.0.1.exe
+    sha512: y20dNTUaLWNqpupooGqCRTlBxVAEzCrruFyoMZMvmYHkfGzI6CgipRl3zCkhb0fydPHs8r2WKpe/fENZjUAUFg==
+    size: 39047450
+path: laligu-setup-1.0.1.exe
+sha512: y20dNTUaLWNqpupooGqCRTlBxVAEzCrruFyoMZMvmYHkfGzI6CgipRl3zCkhb0fydPHs8r2WKpe/fENZjUAUFg==
+sha2: 0bdd1e4e52e61b84d57e763b1c57a59cc3ea2824f5be88ae8e9a12794cff3726
+releaseDate: '2018-07-03T11:53:25.505Z'

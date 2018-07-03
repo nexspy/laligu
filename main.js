@@ -1,11 +1,32 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
 
+const log = require('electron-log');
+
+// auto update
+const {autoUpdater} = require("electron-updater");
+
+// check on environment Dev or Production
+var env = process.env.NODE_ENV || 'development'
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
 function createWindow () {
+  // start info
+  log.info('App starting...');
+  log.info(env);
+
+  // check for updates
+  if (env === 'development') {
+    // Skip autoupdate check
+  } else {
+    autoUpdater.checkForUpdatesAndNotify();
+    // autoUpdater.checkForUpdates();
+  }
+    
+
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
@@ -29,6 +50,7 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
 
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
@@ -48,3 +70,36 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+
+
+//-------------------------------------------------------------------
+// Auto updates 
+//--------------------------------------------------------
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+})
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (info) => {
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater. ' + err);
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+})
+autoUpdater.on('update-downloaded', (info) => {
+  sendStatusToWindow('Update downloaded');
+});
+
+
+function sendStatusToWindow(text) {
+  log.info(text);
+  mainWindow.webContents.send('message', text);
+}
