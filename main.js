@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 
 const log = require('electron-log');
 
@@ -22,8 +22,8 @@ function createWindow () {
   if (env === 'development') {
     // Skip autoupdate check
   } else {
-    autoUpdater.checkForUpdatesAndNotify();
-    // autoUpdater.checkForUpdates();
+    // autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdates();
   }
     
 
@@ -96,6 +96,12 @@ autoUpdater.on('download-progress', (progressObj) => {
 })
 autoUpdater.on('update-downloaded', (info) => {
   sendStatusToWindow('Update downloaded');
+
+  win.webContents.send('updateReady');
+});
+// when receiving a quitAndInstall signal, quit and install the new version ;)
+ipcMain.on("quitAndInstall", (event, arg) => {
+    autoUpdater.quitAndInstall();
 });
 
 

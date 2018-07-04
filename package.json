@@ -7,7 +7,8 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "release": "build"
+    "release": "build",
+    "ship": "build --win -p always"
   },
   "publish": [
     {
