@@ -1,0 +1,67 @@
+<html>
+
+<head>
+    <title>Electron AutoUpdater</title>
+
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/index.css">
+</head>
+
+<body>
+    <script>
+        const ipcRenderer = require('electron').ipcRenderer;
+        // wait for an updateReady message
+        ipcRenderer.on('updateReady', function(event, text) {
+            // changes the text of the button
+            var container = document.getElementById('ready');
+            container.innerHTML = "New Version Ready!";
+            $("#ready").prop("disabled", false);
+        });
+        ipcRenderer.on('update_progress', function(event, percentage) {
+            var width = $("#progress-update").width();
+            var percentage = parseInt(percentage);
+            var new_width = (percentage/100) * width;
+
+            progress_bar.width(new_width);
+        });
+    </script>
+
+
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col">
+          <h2>Version: <span id="version">v1.1.5</span></h2>
+        
+          <button type="button" class="btn btn-primary">Primary</button>
+
+          <div class="meter" id="progress-update">
+              <span style="width: 25%"></span>
+          </div>
+
+          <button id="ready" disabled="disabled" onClick="ipcRenderer.send('quitAndInstall')">No Updates yet..</button>
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <script type="text/javascript" src="../assets/js/jquery-3.2.1.js"></script>
+    <script>
+      window.$ = window.jQuery = require("../assets/js/jquery-3.2.1.js");
+    </script>
+
+    <script type="text/javascript">
+        var progress_bar = $("#progress-update span");
+        start();
+        
+        function start() {
+            progress_bar.width(0);
+        }
+    </script>
+
+</body>
+
+</html>

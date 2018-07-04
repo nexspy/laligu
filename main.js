@@ -21,7 +21,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile('./src/index.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -86,11 +86,13 @@ autoUpdater.on('download-progress', (progressObj) => {
   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
   sendStatusToWindow(log_message);
+
+  mainWindow.webContents.send('update_progress', progressObj.percent);
 })
 autoUpdater.on('update-downloaded', (info) => {
   sendStatusToWindow('Update downloaded');
 
-  win.webContents.send('updateReady');
+  mainWindow.webContents.send('updateReady');
 });
 // when receiving a quitAndInstall signal, quit and install the new version ;)
 ipcMain.on("quitAndInstall", (event, arg) => {
@@ -103,3 +105,10 @@ function sendStatusToWindow(text) {
   log.info(text);
   mainWindow.webContents.send('message', text);
 }
+
+// start update
+ipcMain.on("myCheckForUpdate", (event, arg) => {
+  log.info('................................ Checking for update ................................');
+  // check for updates
+  autoUpdater.checkForUpdates();
+});
