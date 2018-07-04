@@ -15,11 +15,7 @@ let mainWindow
 
 function createWindow () {
   // start info
-  log.info('App starting...');
-  log.info(env);
-
-  // check for updates
-  autoUpdater.checkForUpdates();
+  log.info('................................App starting................................');
 
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
@@ -36,7 +32,10 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
-  })
+  });
+
+  // check for updates
+  autoUpdater.checkForUpdates();
 }
 
 // This method will be called when Electron has finished
@@ -95,6 +94,7 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 // when receiving a quitAndInstall signal, quit and install the new version ;)
 ipcMain.on("quitAndInstall", (event, arg) => {
+    log.info("................................ trying to update manually .......................");
     autoUpdater.quitAndInstall();
 });
 
