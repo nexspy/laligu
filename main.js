@@ -19,13 +19,7 @@ function createWindow () {
   log.info(env);
 
   // check for updates
-  if (env === 'development') {
-    // Skip autoupdate check
-  } else {
-    // autoUpdater.checkForUpdatesAndNotify();
-    autoUpdater.checkForUpdates();
-  }
-    
+  autoUpdater.checkForUpdates();
 
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
